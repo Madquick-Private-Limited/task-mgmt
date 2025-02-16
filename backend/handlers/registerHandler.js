@@ -1,5 +1,5 @@
-import { User } from "../models/db.js";
 import bcrypt from "bcrypt";
+import { User } from "../models/db.js";
 
 const getHashedPassword = async (password) => {
     const saltRounds = 10;

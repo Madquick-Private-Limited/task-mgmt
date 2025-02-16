@@ -1,4 +1,4 @@
-import { Task } from "../models/db";
+import { Task } from "../models/db.js";
 
 const getTaskByIDHandler = async (req, res) => {
     const id = req.params.id;

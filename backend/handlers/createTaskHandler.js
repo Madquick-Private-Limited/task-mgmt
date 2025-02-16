@@ -1,4 +1,4 @@
-import Task from '../models/Task.js';
+import Task from '../models/taskSchema.js';
 
 const createTaskHandler = async (req, res) => {
     const { title, description, dueDate, priority, observer, assignedTo } = req.body;

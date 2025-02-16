@@ -1,4 +1,4 @@
-import { Task } from "../models/db";
+import { Task } from "../models/db.js";
 
 const updateTaskHandler = async (req, res) => {
     const { id, title, description, dueDate, priority, observer, assignedTo, status } = req.body;

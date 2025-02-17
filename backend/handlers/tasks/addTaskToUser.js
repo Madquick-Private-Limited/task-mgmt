@@ -1,4 +1,4 @@
-import { User } from "../models/db.js";
+import { User } from "../../models/db.js";
 
 const addTaskToUser = async (userId, taskId) => {
     try {

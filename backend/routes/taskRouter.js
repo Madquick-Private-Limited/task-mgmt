@@ -1,8 +1,9 @@
 import { Router } from "express";
-import createTaskHandler from "../handlers/createTaskHandler.js";
-import getAllTasksHandler from "../handlers/getAllTasksHandler.js";
-import getTaskByIDHandler from "../handlers/getTaskByIDHandler.js";
-import updateTaskHandler from "../handlers/updateTaskHandler.js";
+import createTaskHandler from "../handlers/tasks/createTaskHandler.js";
+import getAllTasksHandler from "../handlers/tasks/getAllTasksHandler.js";
+import getTaskByIDHandler from "../handlers/tasks/getTaskByIDHandler.js";
+import getTaskByUserIDHandler from "../handlers/tasks/getTaskByUserIDHandler.js";
+import updateTaskHandler from "../handlers/tasks/updateTaskHandler.js";
 import { authorizeRoles, verifyToken } from "../middleware/authMiddleware.js";
 const router = Router();
 
@@ -35,5 +36,12 @@ router.get("/get/:taskId", getTaskByIDHandler);
  * no authorization requires anyone can get all tasks
  */
 router.get("/getAll", getAllTasksHandler)
+
+/**
+ * @route GET /task/getTask/:userID
+ * requires userID as query param
+ * returns all tasks assigned to the user
+ */
+router.get("/getTask/:userID", getTaskByUserIDHandler);
 
 export default router;

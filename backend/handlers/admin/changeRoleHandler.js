@@ -1,5 +1,5 @@
-import { User } from "../models/db";
-import { Roles } from "../utils/roles.js";
+import { User } from "../../models/db.js";
+import { Roles } from "../../utils/roles.js";
 
 const changeRoleHandler = async (req, res) => {
     const { userId, newRole } = req.body;

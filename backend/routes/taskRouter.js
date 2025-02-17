@@ -1,6 +1,7 @@
 import { Router } from "express";
 import createTaskHandler from "../handlers/createTaskHandler.js";
 import updateTaskHandler from "../handlers/updateTaskHandler.js";
+import getAllTasks from "../handlers/getAllTasks.js";
 import getTaskByIDHandler from "../handlers/getTaskByIDHandler.js";
 const router = Router();
 
@@ -24,8 +25,9 @@ router.post("/update", updateTaskHandler);
 // router.post("/get/:id", getTaskByIDHandler);
 
 /**
- * @route POST /task/getAll
+ * @route GET /task/getAll
  * requires
  */
-// router.post("/getAll", )
+router.get("/getAll", getAllTasks)
+
 export default router;

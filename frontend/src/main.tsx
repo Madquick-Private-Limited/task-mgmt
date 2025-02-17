@@ -3,8 +3,7 @@ import Axios from 'axios';
 import {createRoot} from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
-import Register from "./components/Register.tsx";
-import Login from "./components/Login.tsx";
+import Auth from "./components/Auth.tsx";
 import Home from "./components/Home.tsx";
 
 Axios.defaults.withCredentials = true;
@@ -16,12 +15,8 @@ const router = createBrowserRouter([
       element: <App />,
       children: [
           {
-              path: "/register",
-              element: <Register />,
-          },
-          {
-              path: "/login",
-              element: <Login />,
+              path: "/auth",
+              element: <Auth />,
           },
           {
               path: "/",

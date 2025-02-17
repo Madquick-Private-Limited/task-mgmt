@@ -4,13 +4,16 @@ import registerHandler from "../handlers/registerHandler.js";
 import taskRouter from "./taskRouter.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 import getAllUsersHandler from "../handlers/getAllUsersHandler.js";
+import adminRouter from "./adminRouter.js";
 const mainRouter = Router();
 
 mainRouter.post("/login", loginHandler);
 mainRouter.post("/register", registerHandler);
 
-mainRouter.use("/task", taskRouter);
+mainRouter.use(verifyToken);
 
-mainRouter.get("/getAllUsers", verifyToken, getAllUsersHandler);
+mainRouter.use("/task", taskRouter);
+mainRouter.use("/admin", adminRouter);
+mainRouter.get("/getAllUsers", getAllUsersHandler);
 
 export default mainRouter;

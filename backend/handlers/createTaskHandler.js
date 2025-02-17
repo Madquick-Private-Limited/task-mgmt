@@ -1,5 +1,5 @@
 import { Task } from '../models/db.js';
-
+import addTaskToUser from './addTaskToUser.js';
 const createTaskHandler = async (req, res) => {
     const { title, description, dueDate, priority, observer, assignedTo } = req.body;
 
@@ -22,7 +22,11 @@ const createTaskHandler = async (req, res) => {
         });
 
         await newTask.save();
-        // sendNotification(observer, assignedTo);
+
+        addTaskToUser(assignedTo, newTask._id);
+
+        // sendNotification(observer, title);
+        // sendNotification(assignedTo, title);
         return res.json({ message: "Task created successfully" });
     } catch (error) {
         console.error(`Error creating task: ${error}`);

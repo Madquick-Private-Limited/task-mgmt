@@ -1,0 +1,1 @@
+export const Roles = ["ADMIN", "PROJECT MANAGER", "TEAM MEMBER", "CLIENT"];

@@ -1,9 +1,11 @@
 import { Task } from "../models/db.js";
 
 const getTaskByIDHandler = async (req, res) => {
-    const id = req.params.id;
+    const taskId = req.params.id;
     try {
-        const task = await Task.findById(id);
+        const task = await Task.findById({
+            _id: taskId
+        });
         if(!task) {
             return res.status(400).json({ message: "Task does not exist" });
         }

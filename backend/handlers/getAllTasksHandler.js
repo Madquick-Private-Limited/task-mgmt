@@ -1,6 +1,6 @@
 import { Task } from '../models/db.js';
 
-const getAllTasks = async (req, res) => {
+const getAllTasksHandler = async (req, res) => {
     try {
         const allTasks = await Task.find();
 
@@ -11,4 +11,4 @@ const getAllTasks = async (req, res) => {
     }
 }
 
-export default getAllTasks;
+export default getAllTasksHandler;

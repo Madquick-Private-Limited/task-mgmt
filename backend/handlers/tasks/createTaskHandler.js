@@ -1,4 +1,4 @@
-import { Task } from '../models/db.js';
+import { Task } from '../../models/db.js';
 import addTaskToUser from './addTaskToUser.js';
 const createTaskHandler = async (req, res) => {
     const { title, description, dueDate, priority, observer, assignedTo } = req.body;

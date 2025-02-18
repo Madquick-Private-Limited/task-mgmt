@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import Axios from 'axios';
 import { Button } from './ui/button';
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@/hooks/use-toast';
+import Navbar from './Navbar';
 
 interface Task {
     title: string,
@@ -13,6 +16,8 @@ interface Task {
 }
 export default function Home() {
     const [tasks, setTasks] = useState<Task[]>([])
+    const navigate = useNavigate()
+
 
     useEffect(() => {
         const fetchAllTasks = async () => {
@@ -23,7 +28,13 @@ export default function Home() {
                     setTasks(res.data);
                 }
             } catch (err: any) {
-                console.log(err)
+                toast({
+                    variant: "destructive",
+                    title: err.response.data.message || "Error occured processing this request.",
+                })
+                if (err.response.status === 401) {
+                    navigate("/auth")
+                }
             }
         }
 
@@ -46,19 +57,28 @@ export default function Home() {
                 setTasks([...tasks, dummyTask as Task]);
             }
         } catch (err: any) {
-            console.log(err)
+            toast({
+                variant: "destructive",
+                title: err.response.data.message || "Error occured processing this request.",
+            })
+            if (err.response.status === 401) {
+                navigate("/auth")
+            }
         }
     }
 
     return (
-        <div className='flex flex-row justify-around items-center w-full'>
-            <Button onClick={createTask}>Create dummy Task</Button>
-            <div>
-                <div className='font-bold'>Tasks :</div>
+        <div className='flex flex-col h-full w-full'>
+            <Navbar user={{notification: ['first one', 'second']}} />
+            <div className='flex flex-row justify-around items-center w-full'>
+                <Button onClick={createTask}>Create dummy Task</Button>
                 <div>
-                    {tasks.map((task: any, idx: any) => {
-                        return <div key={idx}>{task.title}</div>
-                    })}
+                    <div className='font-bold'>Tasks :</div>
+                    <div>
+                        {tasks.map((task: any, idx: any) => {
+                            return <div key={idx}>{task.title}</div>
+                        })}
+                    </div>
                 </div>
             </div>
         </div>

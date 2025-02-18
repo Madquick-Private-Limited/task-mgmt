@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import Task from "../../models/Task.js";
 import sendNotification from "../sendNotification.js";
+=======
+import { Task } from "../../models/db.js";
+>>>>>>> 8d0a37337310af8bc47160f609f80a12b29ea915
 
 const updateTaskHandler = async (req, res) => {
     const { id, title, description, dueDate, priority, observer, assignedTo, status, Tags, Subtasks, Dependencies  } = req.body;

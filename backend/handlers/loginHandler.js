@@ -11,16 +11,24 @@ configDotenv();
  * @param {*} res 
  * @returns message, jwt secret token
  */
+
+const sessionValidity = 2 * (60 * 60 * 1000); // 2 hours (in milliseconds)
+
+function cleanUser(user) {
+    const { password, __v, ...cleanedUser } = user.toObject();
+    return cleanedUser;
+}
+
 const loginHandler = async (req, res) => {
     logger.info("Login handler called");
     try {
         const { email, password } = req.body;
-        if(!email || !password) {
+        if (!email || !password) {
             return res.status(400).json({ message: "Please enter all fields" });
         }
-        
+
         const user = await User.findOne({ email });
-        if(!user) {
+        if (!user) {
             return res.status(404).json({ message: "User does not exist, create user" });
         }
         const passwordMatches = comparePassword(password, user.password);
@@ -41,5 +49,6 @@ const loginHandler = async (req, res) => {
         return res.status(500).json({ message: "Internal server error in user login" });
     }
 }
+
 
 export default loginHandler;

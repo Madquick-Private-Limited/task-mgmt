@@ -1,5 +1,6 @@
 import express from 'express';
 import { configDotenv } from 'dotenv';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import mainRouter from "./routes/mainRouter.js";
 import connectDB from "./config/db.js";
@@ -20,6 +21,7 @@ connectDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(cors({
     origin: function (origin, callback) {
         // allow requests with no origin from postman

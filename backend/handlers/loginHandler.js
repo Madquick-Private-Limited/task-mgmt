@@ -1,6 +1,7 @@
-import { User } from "../models/db.js";
-import jwt from "jsonwebtoken";
 import { configDotenv } from "dotenv";
+import { logger } from "../index.js";
+import User from "../models/User.js";
+import { comparePassword, generateToken } from "../utils/authUtils.js";
 configDotenv();
 
 
@@ -11,6 +12,7 @@ configDotenv();
  * @returns message, jwt secret token
  */
 const loginHandler = async (req, res) => {
+    logger.info("Login handler called");
     try {
         const { email, password } = req.body;
         if(!email || !password) {
@@ -21,20 +23,15 @@ const loginHandler = async (req, res) => {
         if(!user) {
             return res.status(404).json({ message: "User does not exist, create user" });
         }
-        const passwordMatches = await user.comparePassword(password);
+        const passwordMatches = comparePassword(password, user.password);
         if(!passwordMatches) {
             return res.status(401).json({ message: "Incorrect Password" });
         }
         
         // console.log(process.env.JWT_SECRET);
-        const token = jwt.sign({ 
-            id: user._id,
-            role: user.role
-        }, process.env.JWT_SECRET,
-        {
-            expiresIn: '2h'
-        });
-
+        const token = generateToken(user._id, user.role);
+        
+        logger.info("User logged in successfully");
         return res.status(200).json({
             message: "User logged in successfully",
             token

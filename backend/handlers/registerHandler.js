@@ -1,14 +1,7 @@
-import bcrypt from "bcrypt";
-import { User } from "../models/db.js";
-import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 import { configDotenv } from "dotenv";
+import { generateToken, hashedPassword } from "../utils/authUtils.js";
 configDotenv();
-
-const getHashedPassword = async (password) => {
-    const saltRounds = 10;
-    return await bcrypt.hash(password, saltRounds);
-}
-
 
 /**
  * 
@@ -27,7 +20,7 @@ const registerHandler = async (req, res) => {
             return res.status(400).json({ message: "User with this email already exists" });
         }
 
-        const hashedPassword = await getHashedPassword(password);
+        const hashedPassword = await hashedPassword(password);
         const newUser = new User({ 
             name,
             email, 
@@ -35,10 +28,7 @@ const registerHandler = async (req, res) => {
         });
         
         await newUser.save();
-        const token = jwt.sign({ 
-            id: newUser._id,
-            role: newUser.role
-        }, process.env.JWT_SECRET);
+        const token = generateToken(newUser._id, newUser.role);
 
         return res.json({ 
             message: "User registered successfully",

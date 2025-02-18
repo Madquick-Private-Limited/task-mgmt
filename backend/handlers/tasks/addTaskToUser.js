@@ -1,4 +1,5 @@
-import { User } from "../../models/db.js";
+import User from "../../models/User.js";
+import sendNotification from "../sendNotification.js";
 
 const addTaskToUser = async (userId, taskId) => {
     try {
@@ -11,6 +12,7 @@ const addTaskToUser = async (userId, taskId) => {
         });
 
         console.log(`Task added to user successfully`);
+        sendNotification(userId, taskId);
     } catch (error) {
         console.error(`Error adding task to user: ${error}`);
     }

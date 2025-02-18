@@ -1,7 +1,8 @@
-import { Task } from "../models/db.js";
+import Task from "../../models/Task.js";
+import sendNotification from "../sendNotification.js";
 
 const updateTaskHandler = async (req, res) => {
-    const { id, title, description, dueDate, priority, observer, assignedTo, status } = req.body;
+    const { id, title, description, dueDate, priority, observer, assignedTo, status, Tags, Subtasks, Dependencies  } = req.body;
 
     if(!id || !title || !description || !dueDate || !priority || !observer || !assignedTo || !status) {
         return res.status(400).json({ message: "Please enter all fields" });
@@ -20,9 +21,12 @@ const updateTaskHandler = async (req, res) => {
         task.observer = observer;
         task.assignedTo = assignedTo;
         task.status = status.toUpperCase();
+        task.Tags = Tags && Array.isArray(Tags) ? Tags : [],
+        task.Subtasks =  Subtasks && Array.isArray(Subtasks) ? Subtasks : [],
+        task.Dependencies = Dependencies && Array.isArray(Dependencies) ? Dependencies : [],
 
         await task.save();
-
+        sendNotification(assignedTo, id);
         return res.json({ message: "Task updated successfully" });
     } catch (error) {
         console.error(`Error updating task: ${error}`);

@@ -16,13 +16,13 @@ export const verifyToken = async (req, res, next) => {
         // dont pass password in the req.user
         const user = await User.findById(decoded.id).select("-password");
 
-        if(user) console.log("\nSession authenticated successfully")
+        if(user) console.log("Session authenticated successfully")
  
         req.user = user
         next()
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
-            console.error("\nToken expired")
+            console.error("Token expired")
 
             res.clearCookie('token', {
                 httpOnly: true,
@@ -32,20 +32,20 @@ export const verifyToken = async (req, res, next) => {
             return res.status(401).json({ message: "Session expired, please login again !" })
         }
         else if(error.name === 'JsonWebTokenError'){
-            console.error("\nInvalid token OR No token found !")
+            console.error("Invalid token OR No token found !")
 
             res.clearCookie('token', {
                 httpOnly: true,
                 secure: true,
                 sameSite: 'None'
             })
-            res.status(401).json({ message: "Please login first to view this page !" })
+            return res.status(401).json({ message: "Please login first to view this page !" })
         }
         else{
-            console.error("\nFailed to verify token:", error)
+            console.error("Failed to verify token:", error)
     
             // Handle invalid token error
-            return res.status(401).send({ error: "Unauthorized !" })
+            return res.status(401).json({ messsage: "Unauthorized !" })
         }
     }
 }

@@ -3,7 +3,7 @@ import { Task } from '../../models/db.js';
 const getAllTasksHandler = async (req, res) => {
     try {
         const allTasks = await Task.find();
-
+        console.log("All tasks fetched successfully");
         return res.status(200).json(allTasks);
     } catch (error) {
         console.error(`Error fetching all tasks: ${error}`);

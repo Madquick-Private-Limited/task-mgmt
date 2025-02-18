@@ -1,7 +1,7 @@
 import { configDotenv } from "dotenv";
 import { logger } from "../index.js";
 import User from "../models/User.js";
-import { comparePassword, generateToken } from "../utils/authUtils.js";
+import { comparePassword, generateToken, sessionValidity, cleanUser } from "../utils/authUtils.js";
 configDotenv();
 
 
@@ -12,12 +12,6 @@ configDotenv();
  * @returns message, jwt secret token
  */
 
-const sessionValidity = 2 * (60 * 60 * 1000); // 2 hours (in milliseconds)
-
-function cleanUser(user) {
-    const { password, __v, ...cleanedUser } = user.toObject();
-    return cleanedUser;
-}
 
 const loginHandler = async (req, res) => {
     logger.info("Login handler called");
@@ -38,12 +32,11 @@ const loginHandler = async (req, res) => {
         
         // console.log(process.env.JWT_SECRET);
         const token = generateToken(user._id, user.role);
+
+        res.cookie('token', token, { httpOnly: true, maxAge: sessionValidity, sameSite: 'None', secure: true })
         
         logger.info("User logged in successfully");
-        return res.status(200).json({
-            message: "User logged in successfully",
-            token
-        })
+        return res.status(200).json(cleanUser(user));
     } catch (error) {
         console.error(`Error logging in user: ${error}`);
         return res.status(500).json({ message: "Internal server error in user login" });

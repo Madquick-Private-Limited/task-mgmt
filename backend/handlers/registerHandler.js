@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import { configDotenv } from "dotenv";
-import { generateToken, hashedPassword } from "../utils/authUtils.js";
+import { generateToken, hashedPassword, sessionValidity, cleanUser } from "../utils/authUtils.js";
 configDotenv();
 
 /**
@@ -20,20 +20,18 @@ const registerHandler = async (req, res) => {
             return res.status(400).json({ message: "User with this email already exists" });
         }
 
-        const hashedPassword = await hashedPassword(password);
+        const hashedPass = await hashedPassword(password);
         const newUser = new User({ 
             name,
             email, 
-            password: hashedPassword 
+            password: hashedPass 
         });
         
         await newUser.save();
         const token = generateToken(newUser._id, newUser.role);
-
-        return res.json({ 
-            message: "User registered successfully",
-            token 
-        });
+        res.cookie('token', token, { httpOnly: true, maxAge: sessionValidity, sameSite: 'None', secure: true })
+        
+        return res.json(cleanUser(newUser));
 
     } catch (error) {
         console.error(`Error registering user: ${error}`);

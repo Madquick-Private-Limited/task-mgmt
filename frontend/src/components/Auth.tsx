@@ -21,7 +21,7 @@ import {
 import { useToast } from "../hooks/use-toast"
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,14}$/
 const nameRegex = /^[A-Za-z\s]+$/
 
 
@@ -106,7 +106,8 @@ export default function Auth() {
         if (!passwordRegex.test(user.password)) {
             toast({
                 variant: "destructive",
-                title: "Password must be at least 8 characters long and contain both letters and numbers.",
+                title: "Weak password",
+                description: "Password must be at least 4 characters long || Must contain (at least) : 1. one lowercase letter 2. one uppercase letter 3. one number 4. one special character",
             })
             return;
         }
@@ -126,10 +127,10 @@ export default function Auth() {
             }
 
         } catch (error: any) {
-            console.error('Registration failed', error.message);
+            console.error('Registration failed', error.response);
             toast({
                 variant: "destructive",
-                title: "An error occurred. Please try again later.",
+                title: error.response.data.message,
             })
         }
     };

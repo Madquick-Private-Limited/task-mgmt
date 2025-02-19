@@ -75,10 +75,10 @@ export default function Home() {
         }
     }
 
-    
+
     return (
         <div className='flex flex-col h-full w-full'>
-            <Navbar user={{notification: ['first one', 'second']}} />
+            <Navbar />
             <div className='flex flex-row justify-around items-center w-full'>
                 <Button onClick={createTask}>Create dummy Task</Button>
                 <div>

@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
-export default function Notification({user} : {user: any}) {
+export default function Notification() {
+    const user = useSelector((state: any) => state.userStore.user)
     const [panelShown, setPanelShown] = useState(false)
 
     function handleClick() {
@@ -36,8 +38,8 @@ function NotificationPanel({ notifications, handleClick }: { notifications: stri
             <div aria-hidden="true" className="fixed z-40 w-screen h-screen top-0 left-0" style={blurStyle}></div>
 
             {/* panel */}
-            <div aria-hidden="true" className="overflow-y-auto overflow-x-hidden absolute top-1/4 left-1/3 z-50 w-full max-h-full">
-                <div className="relative p-4 w-full max-w-md max-h-full">
+            <div aria-hidden="true" className="overflow-y-auto overflow-x-hidden absolute top-1/4 left-1/3 z-50 w-fit max-h-full">
+                <div className="relative p-4 w-full w-[30rem] max-h-full">
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
 
                         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">

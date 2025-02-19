@@ -3,17 +3,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import Axios from 'axios'
 import { toast } from '@/hooks/use-toast';
 import Notification from './Notification';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '@/features/authSlice';
+import { Profile } from './Profile';
 
 Axios.defaults.withCredentials = true
 
-const Navbar = ({user}: {user:any}) => {
+const Navbar = () => {
     const isAuthenticated = useSelector((state: any) => state.auth);
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
 
     const handleLogout = async () => {
         await Axios.post(`${import.meta.env.VITE_BACKEND_URL}/logout`)
+        dispatch(logout())
         toast({
             title: "Logged out successfully.",
         })
@@ -46,14 +50,14 @@ const Navbar = ({user}: {user:any}) => {
 
                         {isAuthenticated &&
                             <li>
-                                <Notification user={user} />
+                                <Notification />
                             </li>
                         }
 
 
                         {isAuthenticated &&
                             <li>
-                                <div>Profile</div>
+                                <Profile />
                             </li>
                         }
 

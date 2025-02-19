@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import Navbar from './Navbar';
+import { useSelector } from 'react-redux';
 
 interface Task {
     title: string,
@@ -17,6 +18,12 @@ interface Task {
 export default function Home() {
     const [tasks, setTasks] = useState<Task[]>([])
     const navigate = useNavigate()
+    const user = useSelector((state: any) => state.userStore.user)
+
+
+    useEffect(() => {
+        console.log('User:', user)
+    }, [user])
 
 
     useEffect(() => {
@@ -40,6 +47,7 @@ export default function Home() {
 
         fetchAllTasks()
     }, [])
+
 
     const createTask = async () => {
         try {
@@ -67,6 +75,7 @@ export default function Home() {
         }
     }
 
+    
     return (
         <div className='flex flex-col h-full w-full'>
             <Navbar user={{notification: ['first one', 'second']}} />

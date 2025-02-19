@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import Axios from 'axios';
+import Axios, { AxiosResponse } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/features/userSlice';
+import * as type from "@/types";
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -24,27 +27,26 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,14}$/
 const nameRegex = /^[A-Za-z\s]+$/
 
-
 export default function Auth() {
     const { toast } = useToast()
     const navigate = useNavigate()
-    const [user, setUser] = useState({
+    const dispatch = useDispatch()
+    const [localUser, setLocalUser] = useState({
         name: '',
         email: '',
         password: '',
     })
 
-
     const handleLogin = async (e: any) => {
         e.preventDefault();
         try {
             const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {
-                email: user.email,
-                password: user.password,
+                email: localUser.email,
+                password: localUser.password,
             })
 
             if (response.status === 200) {
-                console.log('Logged in successfully.', response.data)
+                dispatch(setUser(response.data))
                 toast({
                     title: "Logged in successfully.",
                 })
@@ -79,31 +81,30 @@ export default function Auth() {
         }
     };
 
-
     const handleRegister = async (e: any) => {
         e.preventDefault();
-        if (user.name.length < 3 || user.name.length > 20) {
+        if (localUser.name.length < 3 || localUser.name.length > 20) {
             toast({
                 variant: "destructive",
                 title: "Name must be between 3 and 20 characters.",
             })
             return;
         }
-        if (!nameRegex.test(user.name)) {
+        if (!nameRegex.test(localUser.name)) {
             toast({
                 variant: "destructive",
                 title: "Name can only contain alphabetic characters and spaces.",
             })
             return;
         }
-        if (!emailRegex.test(user.email)) {
+        if (!emailRegex.test(localUser.email)) {
             toast({
                 variant: "destructive",
                 title: "Invalid email format.",
             })
             return;
         }
-        if (!passwordRegex.test(user.password)) {
+        if (!passwordRegex.test(localUser.password)) {
             toast({
                 variant: "destructive",
                 title: "Weak password",
@@ -113,17 +114,18 @@ export default function Auth() {
         }
 
         try {
-            const response = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}/register`, {
-                name: user.name,
-                email: user.email,
-                password: user.password,
+            const response: AxiosResponse<type.User> = await Axios.post(`${import.meta.env.VITE_BACKEND_URL}/register`, {
+                name: localUser.name,
+                email: localUser.email,
+                password: localUser.password,
             })
 
             if (response.status === 200) {
-                console.log('Registered successfully.', response.data)
+                dispatch(setUser(response.data))
                 toast({
-                    title: "Registered successfully. Please login.",
+                    title: "Registered successfully. Welcome!",
                 })
+                navigate("/")
             }
 
         } catch (error: any) {
@@ -134,7 +136,6 @@ export default function Auth() {
             })
         }
     };
-
 
     return (
         <Tabs defaultValue="login" className="w-[400px]">
@@ -155,11 +156,11 @@ export default function Auth() {
                     <CardContent className="space-y-2">
                         <div className="space-y-1">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" placeholder="myaddress@email.com" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
+                            <Input id="email" placeholder="myaddress@email.com" value={localUser.email} onChange={(e) => setLocalUser({ ...localUser, email: e.target.value })} />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="password">Password</Label>
-                            <Input id="password" type="password" placeholder='stronggg password' value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} />
+                            <Input id="password" type="password" placeholder='stronggg password' value={localUser.password} onChange={(e) => setLocalUser({ ...localUser, password: e.target.value })} />
                         </div>
                     </CardContent>
                     <CardFooter>
@@ -184,15 +185,15 @@ export default function Auth() {
                     <CardContent className="space-y-2">
                         <div className="space-y-1">
                             <Label htmlFor="name">Name</Label>
-                            <Input id="name" placeholder='Your name here' value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} />
+                            <Input id="name" placeholder='Your name here' value={localUser.name} onChange={(e) => setLocalUser({ ...localUser, name: e.target.value })} />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" placeholder="myaddress@email.com" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
+                            <Input id="email" placeholder="myaddress@email.com" value={localUser.email} onChange={(e) => setLocalUser({ ...localUser, email: e.target.value })} />
                         </div>
                         <div className="space-y-1">
                             <Label htmlFor="new">Password</Label>
-                            <Input id="new" type="password" placeholder='stronggg password' value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} />
+                            <Input id="new" type="password" placeholder='stronggg password' value={localUser.password} onChange={(e) => setLocalUser({ ...localUser, password: e.target.value })} />
                         </div>
                     </CardContent>
                     <CardFooter>

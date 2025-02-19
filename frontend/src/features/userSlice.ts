@@ -1,5 +1,5 @@
 import * as type from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
     user: <type.User>{}
@@ -9,7 +9,7 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUser: (state, action) => {
+        setUser: (state, action: PayloadAction<type.User>) => {
             state.user = action.payload
         },
         updateUser: (state, action) => {
@@ -18,7 +18,6 @@ export const userSlice = createSlice({
         }
     }
 })
-
 
 export const {setUser, updateUser} = userSlice.actions
 export default userSlice.reducer

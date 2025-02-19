@@ -26,9 +26,9 @@ export interface Task {
 }
 
 export interface Notification {
-    _id?: string,
-    message: string,
-    taskID: string,
-    createdAt?: Date,
-    updatedAt?: string,
+    _id?: string;
+    message: string;
+    taskID: string;
+    createdAt?: Date;
+    updatedAt?: string;
 }

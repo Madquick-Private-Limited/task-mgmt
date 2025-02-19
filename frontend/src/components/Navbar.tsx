@@ -1,14 +1,14 @@
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 // import ThemeToggle from '../ThemeToggle';
 import Axios from 'axios'
 import { toast } from '@/hooks/use-toast';
 import Notification from './Notification';
+import { useSelector } from 'react-redux';
 
 Axios.defaults.withCredentials = true
 
 const Navbar = ({user}: {user:any}) => {
-    const [isLoggedIn, _setIsLoggedIn] = useState(false)
+    const isAuthenticated = useSelector((state: any) => state.auth);
     const navigate = useNavigate()
 
 
@@ -44,21 +44,21 @@ const Navbar = ({user}: {user:any}) => {
                 <div className="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
                     <ul className="flex flex-col items-center font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
 
-                        {isLoggedIn &&
+                        {isAuthenticated &&
                             <li>
                                 <Notification user={user} />
                             </li>
                         }
 
 
-                        {isLoggedIn &&
+                        {isAuthenticated &&
                             <li>
                                 <div>Profile</div>
                             </li>
                         }
 
                         <li>
-                            {!isLoggedIn ? (
+                            {!isAuthenticated ? (
                                 <Link
                                     to="auth"
                                     className=''

@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import Navbar from './Navbar';
 import { useSelector } from 'react-redux';
+import { Task } from './Task';
+import waves from '../assets/waves.svg'
+import Footer from './Footer';
 
 interface Task {
     title: string,
@@ -33,6 +36,7 @@ export default function Home() {
 
                 if (res.status === 200) {
                     setTasks(res.data);
+                    console.log(res.data)
                 }
             } catch (err: any) {
                 toast({
@@ -77,19 +81,17 @@ export default function Home() {
 
 
     return (
-        <div className='flex flex-col h-full w-full'>
+        <div className='relative flex flex-col w-full h-full'>
             <Navbar />
-            <div className='flex flex-row justify-around items-center w-full'>
-                <Button onClick={createTask}>Create dummy Task</Button>
-                <div>
-                    <div className='font-bold'>Tasks :</div>
-                    <div>
-                        {tasks.map((task: any, idx: any) => {
-                            return <div key={idx}>{task.title}</div>
-                        })}
-                    </div>
+            <div className='relative flex flex-col justify-around items-start w-full'>
+                <Button className='ml-40 mt-10' onClick={createTask}>Create Task</Button>
+                <div className='flex flex-row flex-wrap gap-4 p-8 justify-center'>
+                    {tasks.map((task: any, idx: any) => {
+                        return <Task key={idx} task={task}></Task>
+                    })}
                 </div>
             </div>
+            <Footer />
         </div>
     )
 }

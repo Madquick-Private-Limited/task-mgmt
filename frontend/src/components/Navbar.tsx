@@ -29,7 +29,7 @@ const Navbar = () => {
         <nav className="w-full select-none border-gray-200 bg-slate-200 dark:bg-gray-900 dark:border-gray-700">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                    App<span className="text-blue-600 dark:text-blue-500">Logo</span>.
+                    <span className="text-orange-500 dark:text-orange-500">Logo</span>.
                 </h1>
 
                 <button
